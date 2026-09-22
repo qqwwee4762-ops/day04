@@ -10,6 +10,9 @@
   li { padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; }
   .empty, .error { color: #888; }
   .error { color: #c00; }
+  .field { display: flex; gap: 6px; padding: 2px 0; }
+  .field-key { color: #888; min-width: 90px; }
+  .field-value { word-break: break-all; }
 </style>
 </head>
 <body>
@@ -38,7 +41,17 @@
         }
 
         listEl.innerHTML = todos
-          .map(todo => `<li>${JSON.stringify(todo)}</li>`)
+          .map(todo => {
+            const fields = Object.entries(todo)
+              .map(([key, value]) => `
+                <div class="field">
+                  <span class="field-key">${key}</span>
+                  <span class="field-value">${value === null ? "-" : String(value)}</span>
+                </div>
+              `)
+              .join("");
+            return `<li>${fields}</li>`;
+          })
           .join("");
       } catch (err) {
         listEl.innerHTML = `<li class="error">오류: ${err.message}</li>`;
